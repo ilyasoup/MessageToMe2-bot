@@ -82,7 +82,6 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     stats = user_data.get(user_id, {"received": 0, "sent": 0, "users": set()})
     await update.message.reply_text(
         f"📊 Твоя статистика:\n"
-        
         f"Получено сообщений всего: {stats['received']}\n"
         f"Отправлено сообщений: {stats['sent']}\n"
         f"Уникальных отправителей: {len(stats['users'])}"
