@@ -17,7 +17,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_data.setdefault(user_id, {"received": 0, "sent": 0, "users": set()})
     await update.message.reply_text(
-        "👋🏼 Привет, чтобы начать, отправь ссылку друзьям, чтобы они могли написать тебе анонимное сообщение:\n\n"
+        "👋🏼 Привет, чтобы начать отправь ссылку друзьям, чтобы они могли написать тебе анонимное сообщение:\n\n"
         f"https://t.me/{context.bot.username}?start={user_id}"
     )
 
@@ -41,7 +41,7 @@ async def handle_start_param(update: Update, context: ContextTypes.DEFAULT_TYPE)
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     await update.message.reply_text(
-        "Погнали 👇",
+        "Погнали, жми на кнопку👇",
         reply_markup=reply_markup
     )
 
@@ -82,6 +82,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     stats = user_data.get(user_id, {"received": 0, "sent": 0, "users": set()})
     await update.message.reply_text(
         f"📊 Твоя статистика:\n"
+        
         f"Получено сообщений всего: {stats['received']}\n"
         f"Отправлено сообщений: {stats['sent']}\n"
         f"Уникальных отправителей: {len(stats['users'])}"
