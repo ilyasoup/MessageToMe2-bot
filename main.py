@@ -16,7 +16,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_data.setdefault(user_id, {"received": 0, "sent": 0, "users": set()})
     await update.message.reply_text(
-        "Привет, чтобы начать! 👋 Отправь ссылку друзьям, чтобы они могли написать тебе анонимное сообщение:\n\n"
+        "👋🏼 Привет, чтобы начать, отправь ссылку друзьям, чтобы они могли написать тебе анонимное сообщение:\n\n"
         f"https://t.me/{context.bot.username}?start={user_id}"
     )
 
