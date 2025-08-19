@@ -83,20 +83,31 @@ async def forward_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_to = context.user_data.get("reply_to")
 
     if reply_to:
-        # Уведомление получателю
-        await context.bot.send_message(chat_id=reply_to, text="📩 Получено новое анонимное сообщение!")
-        # Само сообщение
-        await update.message.copy(chat_id=reply_to)
-
         user_data.setdefault(reply_to, {"received": 0, "sent": 0, "users": set()})
         user_data[reply_to]["received"] += 1
         context.user_data["reply_to"] = None
 
-        await update.message.reply_text("✅ Сообщение отправлено анонимно!")
+        message = update.message
+
+        # Если это текстовое сообщение
+        if message.text or message.caption:
+            text_content = message.text or message.caption
+            combined_text = f"📩 Получено новое сообщение:\n\n{text_content}"
+            await context.bot.send_message(chat_id=reply_to, text=combined_text)
+
+            await update.message.reply_text("✅ Сообщение отправлено анонимно!")
+
+        else:
+            # Для медиа (голосовые, кружки, фото, видео и т.д.)
+            await context.bot.send_message(chat_id=reply_to, text="📩 Получено новое сообщение!")
+            await message.copy(chat_id=reply_to)
+
+            await update.message.reply_text("✅ Сообщение отправлено анонимно!")
+
     else:
         user_id = update.effective_user.id
         await send_main_menu(update, context, user_id)
-
+        
 
 # --- статистика ---
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
