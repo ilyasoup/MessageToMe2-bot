@@ -16,7 +16,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_data.setdefault(user_id, {"received": 0, "sent": 0, "users": set()})
     await update.message.reply_text(
-        "Привет! 👋 Отправь ссылку друзьям, чтобы они могли написать тебе анонимное сообщение:\n\n"
+        "Привет, чтобы начать! 👋 Отправь ссылку друзьям, чтобы они могли написать тебе анонимное сообщение:\n\n"
         f"https://t.me/{context.bot.username}?start={user_id}"
     )
 
@@ -36,11 +36,11 @@ async def handle_start_param(update: Update, context: ContextTypes.DEFAULT_TYPE)
     user_data[sender_id]["sent"] += 1
     user_data[sender_id]["users"].add(target_id)
 
-    keyboard = [[InlineKeyboardButton("✍️ Ответить анонимно", callback_data=f"reply_{target_id}")]]
+    keyboard = [[InlineKeyboardButton("✍️ Чтобы написать сообщение тыкни тут", callback_data=f"reply_{target_id}")]]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     await update.message.reply_text(
-        "Оставь своё анонимное сообщение здесь 👇",
+        "Погнали 👇",
         reply_markup=reply_markup
     )
 
@@ -53,7 +53,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data.startswith("reply_"):
         target_id = int(query.data.split("_")[1])
         context.user_data["reply_to"] = target_id
-        await query.edit_message_text("✍️ Напиши сообщение, оно будет доставлено анонимно.")
+        await query.edit_message_text("✍️ Напиши сообщение, оно будет доставлено анонимно, так же можешь отправить фото, голосовое, или кружок.")
 
 
 async def forward_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -68,7 +68,7 @@ async def forward_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data["reply_to"] = None
         await update.message.reply_text("✅ Сообщение отправлено анонимно!")
     else:
-        await update.message.reply_text("Используй команду /start, чтобы отправить анонимное сообщение.")
+        await update.message.reply_text("Используй команду /start, чтобы отправить анонимное сообщение, или получить свою ссылку.")
 
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -76,7 +76,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     stats = user_data.get(user_id, {"received": 0, "sent": 0, "users": set()})
     await update.message.reply_text(
         f"📊 Твоя статистика:\n"
-        f"Получено сообщений: {stats['received']}\n"
+        f"Получено сообщений всего: {stats['received']}\n"
         f"Отправлено сообщений: {stats['sent']}\n"
         f"Уникальных отправителей: {len(stats['users'])}"
     )
