@@ -1,9 +1,10 @@
 import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ContextTypes
+import os
 
-# --- Вставь сюда свой токен ---
-BOT_TOKEN = "8389234141:AAHm35p7eaKP1Riub6LQq6MF_bryzN4Xxys"
+# --- Храни токен в переменных окружения (лучше для Render) ---
+BOT_TOKEN = os.getenv("BOT_TOKEN", "8389234141:AAHm35p7eaKP1Riub6LQq6MF_bryzN4Xxys")
 
 # Хранилище сообщений и статистики
 user_data = {}
@@ -62,10 +63,15 @@ async def forward_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_to = context.user_data.get("reply_to")
 
     if reply_to:
+        # 🔥 Сначала отправляем уведомление
+        await context.bot.send_message(chat_id=reply_to, text="📩 Получено новое анонимное сообщение!")
+        # Потом копируем сообщение
         await update.message.copy(chat_id=reply_to)
+
         user_data.setdefault(reply_to, {"received": 0, "sent": 0, "users": set()})
         user_data[reply_to]["received"] += 1
         context.user_data["reply_to"] = None
+
         await update.message.reply_text("✅ Сообщение отправлено анонимно!")
     else:
         await update.message.reply_text("Используй команду /start, чтобы отправить анонимное сообщение, или получить свою ссылку.")
