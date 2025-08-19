@@ -3,7 +3,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ContextTypes
 
 # --- Вставь сюда свой токен ---
-BOT_TOKEN = "ТВОЙ_ТОКЕН_ОТСЮДА"
+BOT_TOKEN = 8389234141:AAHm35p7eaKP1Riub6LQq6MF_bryzN4Xxys
 
 # Хранилище сообщений и статистики
 user_data = {}
